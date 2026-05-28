@@ -1,0 +1,24 @@
+# Project: AI-Powered Fraud Intelligence Engine (Spring Boot + Spring AI)
+# Role: Senior Java Backend Engineer / Architect
+
+## General Constraints
+- Write concise, production-grade Java 21 code.
+- Omit boilerplate explanations; provide only implementation details and necessary context.
+- Prioritize immutability: strictly use Java `record` for all DTOs and value objects.
+- Favor constructor injection via Lombok's `@RequiredArgsConstructor`.
+- Never use `System.out.println`. Always use SLF4J `@Slf4j`.
+
+## Architectural Rules (Advisory Intelligence)
+- The system is an Advisory Oracle, not a transactional authority.
+- ALL LLM outputs must be constrained by the `FraudRiskLevel` Enum: LOW_RISK, HIGH_RISK, MANUAL_REVIEW.
+- Prioritize the "Sad Path": missing data, low RAG similarity, or LLM timeouts must safely default to MANUAL_REVIEW.
+
+## Observability & Fault Tolerance
+- Every async boundary and controller entry point MUST include SLF4J MDC (Mapped Diagnostic Context) tracing with a `traceId`.
+- Always clear the MDC context in a `finally` block to prevent thread-pool pollution.
+- Any external call (LLM, Database) must be wrapped in Resilience4j `@CircuitBreaker` and `@Retry`.
+
+## Spring AI Constraints (Anthropic Claude)
+- Utilize `spring-ai-anthropic-spring-boot-starter`.
+- Enforce strict structured outputs using Spring AI's `BeanOutputConverter`.
+- When generating Retrieval-Augmented Generation (RAG) queries, ensure pgvector cosine distance queries are explicitly bounded.
