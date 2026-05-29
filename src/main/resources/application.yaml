@@ -1,3 +1,21 @@
 spring:
   application:
     name: fraud-engine
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [${spring.application.name:},%X{traceId:--}] --- [%t] %-40.40logger{39} : %m%n"
+
+resilience4j:
+  retry:
+    instances:
+      llmInvestigate:
+        maxAttempts: 2
+        waitDuration: 1s
+  circuitbreaker:
+    instances:
+      llmInvestigate:
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        permittedNumberOfCallsInHalfOpenState: 2
+        waitDurationInOpenState: 15s
