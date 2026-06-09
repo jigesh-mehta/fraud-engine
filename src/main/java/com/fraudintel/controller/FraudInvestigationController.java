@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/fraud")
 @RequiredArgsConstructor
+@Tag(name = "Investigation", description = "Endpoints for AI-driven transaction analysis")
 public class FraudInvestigationController {
 
     private static final String RESILIENCE_INSTANCE = "llmInvestigate";
@@ -28,6 +32,11 @@ public class FraudInvestigationController {
     private final FraudInvestigationService investigationService;
 
     @PostMapping("/investigate")
+    @Operation(
+        summary = "Analyze a transaction for fraud risk",
+        description = "Embeds transaction data via ONNX, retrieves historical context from Supabase, and orchestrates an advisory decision via Claude."
+    )
+    @ApiResponse(responseCode = "200", description = "Investigation completed successfully")
     @CircuitBreaker(name = RESILIENCE_INSTANCE, fallbackMethod = "manualReviewFallback")
     @Retry(name = RESILIENCE_INSTANCE, fallbackMethod = "manualReviewFallback")
     public ResponseEntity<InvestigationResponse> investigateTransaction(@RequestBody InvestigationRequest request) {
