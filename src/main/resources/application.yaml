@@ -1,6 +1,29 @@
 spring:
   application:
     name: fraud-engine
+  ai:
+    embedding:
+      transformer:
+        tokenizer:
+          uri: classpath:onnx/all-MiniLM-L6-v2/tokenizer.json
+        onnx:
+          model-uri: classpath:onnx/all-MiniLM-L6-v2/model.onnx
+        cache:
+          directory: ${java.io.tmpdir}/spring-ai-onnx-model
+  datasource:
+    # Direct host (db.*.supabase.co) is IPv6-only — fails on many home/office networks with UnknownHostException.
+    # Use Session pooler (IPv4): copy host + region from Supabase → Project Settings → Database → Session pooler.
+    url: jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require
+    username: postgres.eofnqhkmrtmcsxryzoqo
+    password: ${SUPABASE_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      # We use 'validate' because we manually created the schema in Supabase
+      ddl-auto: validate 
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
   pattern:
@@ -19,3 +42,9 @@ resilience4j:
         minimumNumberOfCalls: 3
         permittedNumberOfCallsInHalfOpenState: 2
         waitDurationInOpenState: 15s
+
+fraud:
+  seed:
+    enabled: false
+    force: false
+

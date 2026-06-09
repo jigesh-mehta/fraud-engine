@@ -1,0 +1,32 @@
+[
+  {
+    "threatScenario": "ACCOUNT_TAKEOVER",
+    "advisoryContext": "Login from new device in foreign country minutes after password reset; velocity of high-value transfers to newly added payees.",
+    "riskLevel": "HIGH_RISK"
+  },
+  {
+    "threatScenario": "CARD_NOT_PRESENT_FRAUD",
+    "advisoryContext": "Multiple e-commerce authorizations at digital goods merchants within ten minutes; shipping address differs from billing profile.",
+    "riskLevel": "HIGH_RISK"
+  },
+  {
+    "threatScenario": "MONEY_MULE",
+    "advisoryContext": "Inbound wires from unrelated individuals followed by immediate outbound crypto purchases; account age under thirty days.",
+    "riskLevel": "HIGH_RISK"
+  },
+  {
+    "threatScenario": "MERCHANT_CATEGORY_ANOMALY",
+    "advisoryContext": "Retail card used at money transfer MCC 4829 with amount just below reporting threshold; inconsistent with twelve-month spend pattern.",
+    "riskLevel": "MANUAL_REVIEW"
+  },
+  {
+    "threatScenario": "BENIGN_RECURRING",
+    "advisoryContext": "Monthly subscription at known streaming merchant; stable amount and same merchant for eighteen consecutive months.",
+    "riskLevel": "LOW_RISK"
+  },
+  {
+    "threatScenario": "FIRST_PARTY_ABUSE",
+    "advisoryContext": "Customer disputes legitimate charges after goods delivered; prior dispute history on same account within ninety days.",
+    "riskLevel": "MANUAL_REVIEW"
+  }
+]

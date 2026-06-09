@@ -34,3 +34,6 @@ build/
 
 .cursor/
 
+# Large ONNX model weights — use scripts/download-onnx-model.ps1
+src/main/resources/onnx/**/model.onnx
+
