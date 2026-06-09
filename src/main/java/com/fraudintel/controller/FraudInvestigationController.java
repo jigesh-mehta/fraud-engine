@@ -3,6 +3,7 @@ package com.fraudintel.controller;
 import com.fraudintel.domain.FraudRiskLevel;
 import com.fraudintel.domain.InvestigationRequest;
 import com.fraudintel.domain.InvestigationResponse;
+import com.fraudintel.service.FraudInvestigationService;
 import com.fraudintel.observability.TraceContext;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -24,7 +25,7 @@ public class FraudInvestigationController {
 
     private final TraceContext traceContext;
 
-    // TODO: private final ChatClient chatClient; (To be injected when we wire Anthropic)
+    private final FraudInvestigationService investigationService;
 
     @PostMapping("/investigate")
     @CircuitBreaker(name = RESILIENCE_INSTANCE, fallbackMethod = "manualReviewFallback")
@@ -47,14 +48,10 @@ public class FraudInvestigationController {
                 ));
             }
 
-            // TODO: Execute Semantic RAG Retrieval and Agentic LLM Orchestration here
+            // Execute Semantic RAG & Claude Orchestration
+            InvestigationResponse decision = investigationService.investigate(request);
 
-            return ResponseEntity.ok(new InvestigationResponse(
-                    traceId,
-                    FraudRiskLevel.LOW_RISK,
-                    "Awaiting Spring AI Claude integration."
-            ));
-
+            return ResponseEntity.ok(decision);
         } finally {
             traceContext.clear();
         }
